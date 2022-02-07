@@ -1,10 +1,10 @@
-import { Box, Flex, Text, Image } from "@chakra-ui/react";
+import { Button, Flex, Text, Image } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import Card from "../Card";
 
 const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
   const firstAuthor = authors[0];
-  const remainingAuthors = authors.slice(1);
+  // const remainingAuthors = authors.slice(1);
 
   return (
     <Flex gridGap="4" alignItems="center">
@@ -32,7 +32,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const numOfComments = comments.length;
 
   return (
-    <Card cursor="pointer" id={id}>
+    <Card cursor="pointer" key={id}>
       <Flex direction="column" padding="4">
         <Flex>
           <Text fontSize="12" color="blackAlpha.500">
@@ -45,10 +45,19 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
         <Text noOfLines={3} fontSize="14" color="blackAlpha.700">
           {description}
         </Text>
-        <Flex my="2">
+        <Flex my="4">
           <AuthorsInfo authors={authors} />
         </Flex>
-        <Text>{numOfComments} comments</Text>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Button borderRadius="full">Read more</Button>
+          <Text
+            _hover={{
+              textDecoration: "underline",
+            }}
+          >
+            {numOfComments} comments
+          </Text>
+        </Flex>
       </Flex>
     </Card>
   );

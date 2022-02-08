@@ -7,11 +7,18 @@ const Header = () => {
 
   const iconProps: any = {
     color: () => useColorModeValue("black", "white"),
-    w: "6",
-    h: "6",
+    w: "8",
+    h: "8",
+    p: "1",
     cursor: "pointer",
     ml: "auto",
     onClick: toggleColorMode,
+    borderRadius: "md",
+    transitionProperty: "background-color",
+    transitionDuration: "0.15s",
+    _hover: {
+      bg: useColorModeValue("#f6f7fc", "#2d374f"),
+    },
   };
 
   return (

@@ -17,20 +17,35 @@ import getBlogPosts from "../api";
 import { useState } from "react";
 import BlogCard from "../components/BlogCard";
 import Header from "../components/Header";
+import {
+  ArrowBackIcon,
+  ArrowForwardIcon,
+  ArrowLeftIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
 
 const BlogPosts: React.FC<{
   posts: Blog[];
   currentPage: number;
+  setCurrentPage: (page: number) => void;
   onPrevPage: () => void;
   onNextPage: () => void;
   totalPages: number;
-}> = ({ posts, currentPage, onPrevPage, onNextPage, totalPages }) => {
+}> = ({
+  posts,
+  currentPage,
+  onPrevPage,
+  onNextPage,
+  totalPages,
+  setCurrentPage,
+}) => {
   if (posts.length === 0) {
     return <Text>No blog posts found.</Text>;
   }
 
   return (
-    <Flex direction="column" gridGap="8" maxW="80%" margin="auto">
+    <Flex direction="column" gridGap="8" margin="auto">
       <Flex wrap="wrap" gridGap="4" justifyContent="center">
         {posts
           .sort(
@@ -41,18 +56,48 @@ const BlogPosts: React.FC<{
             <BlogCard blog={blog} key={blog.id} />
           ))}
       </Flex>
-      <Flex justifyContent="space-between">
-        {currentPage !== 1 && (
-          <Button w="auto" mr="auto" onClick={onPrevPage}>
-            {" "}
-            Prev. Page{" "}
-          </Button>
-        )}
-        {currentPage !== totalPages && (
-          <Button w="auto" ml="auto" onClick={onNextPage}>
-            Next Page
-          </Button>
-        )}
+      <Flex
+        justifyContent="space-between"
+        maxW="700px"
+        m="auto"
+        gridGap="8"
+        direction={["column", "row"]}
+      >
+        <Button
+          visibility={currentPage !== 1 ? "visible" : "hidden"}
+          gridGap="2"
+          w="auto"
+          mr="auto"
+          onClick={onPrevPage}
+        >
+          <ArrowBackIcon />
+          Prev. Page
+        </Button>
+        <Flex gridGap="4" maxW="100%" overflowX="auto">
+          {Array.from(new Array(totalPages)).map((_x, i) => (
+            <Text
+              onClick={() => setCurrentPage(i + 1)}
+              color={useColorModeValue("black", "white")}
+              cursor="pointer"
+              p="2"
+              px="4"
+              borderRadius="lg"
+              _hover={{ bg: useColorModeValue("#eef2f7", "#3f475d") }}
+            >
+              {i + 1}
+            </Text>
+          ))}
+        </Flex>
+        <Button
+          visibility={currentPage !== totalPages ? "visible" : "hidden"}
+          gridGap="2"
+          w="auto"
+          ml="auto"
+          onClick={onNextPage}
+        >
+          Next Page
+          <ArrowForwardIcon />
+        </Button>
       </Flex>
     </Flex>
   );
@@ -96,19 +141,19 @@ const Home: NextPage = () => {
         paddingY="8"
       >
         <Heading as="h1" textAlign="center" fontSize="40">
-          Blog Displayer
+          📑 Blog Displayer
         </Heading>
         <Heading
           as="h4"
           fontSize="18"
+          textAlign="center"
           color={useColorModeValue("blackAlpha.600", "gray.400")}
           fontWeight="normal"
           display="flex"
           gridGap="2"
           marginBottom="8"
         >
-          Displaying blogs between <Skeleton>Todays Date</Skeleton> and{" "}
-          <Skeleton>Todays Date</Skeleton>
+          Displaying randomly generated lorem ipsum blogs. All day, every day.
         </Heading>
         {/* <InputGroup w={["100%", "60%", "40%"]}>
           <Input
@@ -141,6 +186,7 @@ const Home: NextPage = () => {
           <BlogPosts
             posts={blogPosts.data[currentPage] as Blog[]}
             currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
             onNextPage={() => setCurrentPage(currentPage + 1)}
             onPrevPage={() => setCurrentPage(currentPage - 1)}
             totalPages={Object.keys(blogPosts.data).length}

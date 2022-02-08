@@ -20,10 +20,10 @@ export const getBlogPosts = (searchTerm: string = "", pageSize: number = 5) =>
         if (blogPostHash[counter]) {
           blogPostHash[counter].push(blogPostData[i]);
         } else {
-          blogPostHash[counter] = [];
+          blogPostHash[counter] = [blogPostData[i]];
         }
 
-        if (i % pageSize === 0 && i !== 0) counter++;
+        if ((i + 1) % pageSize === 0 && i !== 0) counter++;
       }
 
       return blogPostHash;

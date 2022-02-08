@@ -1,4 +1,5 @@
 import { Button, Flex, Text, Image } from "@chakra-ui/react";
+import { useColorModeValue } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import Card from "../Card";
 
@@ -35,14 +36,21 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
     <Card cursor="pointer" key={id}>
       <Flex direction="column" padding="4">
         <Flex>
-          <Text fontSize="12" color="blackAlpha.500">
+          <Text
+            fontSize="12"
+            color={useColorModeValue("blackAlpha.500", "gray.500")}
+          >
             {dayjs(createdAt).format("MMMM DD, YYYY")}
           </Text>
         </Flex>
         <Text fontWeight="bold" fontSize="18">
           {title}
         </Text>
-        <Text noOfLines={3} fontSize="14" color="blackAlpha.700">
+        <Text
+          noOfLines={3}
+          fontSize="14"
+          color={useColorModeValue("blackAlpha.700", "gray.400")}
+        >
           {description}
         </Text>
         <Flex my="4">

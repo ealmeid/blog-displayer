@@ -10,6 +10,7 @@ import {
   InputRightElement,
   Spinner,
   Box,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import getBlogPosts from "../api";
@@ -78,7 +79,12 @@ const Home: NextPage = () => {
   );
 
   return (
-    <Box minH="100vh" bg="#f6f7fc">
+    <Box
+      minH="100vh"
+      bg={useColorModeValue("#f6f7fc", "#2d374f")}
+      transitionProperty="background-color"
+      transitionDuration="0.15s"
+    >
       <Header />
       <Flex
         flex="1"
@@ -95,7 +101,7 @@ const Home: NextPage = () => {
         <Heading
           as="h4"
           fontSize="18"
-          color="blackAlpha.600"
+          color={useColorModeValue("blackAlpha.600", "gray.400")}
           fontWeight="normal"
           display="flex"
           gridGap="2"

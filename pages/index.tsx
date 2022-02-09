@@ -45,14 +45,14 @@ const BlogPosts: React.FC<{
   const [currentBlog, setCurrentBlog] = useState<Blog>(posts[0]);
 
   return (
-    <Flex direction="column" gridGap="8" margin="auto">
+    <Flex direction="column" gridGap="12" margin="auto" maxW="1000px">
       <Flex wrap="wrap" gridGap="4" justifyContent="center">
         {posts
           .sort(
             (a: Blog, b: Blog) =>
               new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf()
           )
-          .map((blog: Blog, index: number) => (
+          .map((blog: Blog) => (
             <BlogCard
               blog={blog}
               key={blog.id}
@@ -85,19 +85,20 @@ const BlogPosts: React.FC<{
           <ArrowBackIcon />
           <Text display={["none", "block"]}>Prev. Page</Text>
         </Button>
-        <Flex gridGap="4" maxW="100%" overflowX="auto">
+        <Flex gridGap="4" flex="1">
           {Array.from(new Array(totalPages)).map((_x, i) => (
-            <Text
+            <Button
               onClick={() => setCurrentPage(i + 1)}
               color={useColorModeValue("black", "white")}
               cursor="pointer"
-              p="2"
-              px="4"
-              borderRadius="lg"
-              _hover={{ bg: useColorModeValue("#eef2f7", "#3f475d") }}
+              bg={
+                currentPage === i + 1
+                  ? useColorModeValue("#e0e1e4", "#6e7ca1")
+                  : useColorModeValue("#edf2f7", "#3d475d")
+              }
             >
               {i + 1}
-            </Text>
+            </Button>
           ))}
         </Flex>
         <Button
@@ -185,7 +186,7 @@ const Home: NextPage = () => {
         </InputGroup> */}
         {isLoading ? (
           <Flex direction="column" alignItems="center" gridGap="4">
-            <Text color="blackAlpha.600">Retrieving Blog Posts</Text>
+            <Text color="blackAlpha.600">Retrieving Blog Posts...</Text>
             <Spinner
               thickness="4px"
               speed="0.65s"

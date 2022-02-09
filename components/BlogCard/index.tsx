@@ -2,6 +2,7 @@ import { ChatIcon } from "@chakra-ui/icons";
 import { Button, Flex, Text, Image } from "@chakra-ui/react";
 import { useColorModeValue } from "@chakra-ui/react";
 import dayjs from "dayjs";
+import imageData from "../../utils/imageData";
 import Card from "../Card";
 import UserPhoto from "../UserPhoto";
 
@@ -18,7 +19,9 @@ const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
             position="absolute"
             zIndex={authors.length - index}
             left={index * 2}
-            boxShadow={index > 0 ? "lg" : "none"}
+            boxShadow={
+              authors.length !== 1 ? "2px 0px 2px rgba(0, 0, 0, 0.25)" : "none"
+            }
           />
         ))}
       </Flex>
@@ -49,15 +52,16 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, onClick }) => {
       transitionDuration="0.15s"
       onClick={onClick}
       _hover={{
-        bg: useColorModeValue("#e6e6e6", "#252d41"),
+        bg: useColorModeValue("#efefef", "#252d41"),
       }}
+      boxShadow="md"
     >
       <Flex direction="column" padding="4">
         <Image
           borderRadius="lg"
           h="20"
           objectFit="cover"
-          src="https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YWJzdHJhY3R8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60"
+          src={imageData[parseInt(id)]}
           marginBottom="2"
         />
         <Text

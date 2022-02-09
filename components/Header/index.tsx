@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <Flex
-      h="10vh"
+      h="8vh"
       bg={useColorModeValue("white", "#171c28")}
       w="100%"
       alignItems="center"

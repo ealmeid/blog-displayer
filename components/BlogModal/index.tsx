@@ -16,6 +16,7 @@ import {
 import UserPhoto from "../UserPhoto";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import imageData from "../../utils/imageData";
 
 dayjs.extend(relativeTime);
 
@@ -48,7 +49,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
   onOpen,
   onClose,
 }) => {
-  const { title, description, authors, comments, createdAt } = blog;
+  const { id, title, description, authors, comments, createdAt } = blog;
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">
@@ -59,7 +60,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
           borderTopRadius="lg"
           h="24"
           objectFit="cover"
-          src="https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YWJzdHJhY3R8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60"
+          src={imageData[parseInt(id)]}
           marginBottom="2"
         />
         <ModalHeader fontSize="28" textAlign="center" pb="0">
@@ -69,11 +70,15 @@ const BlogModal: React.FC<BlogModalProps> = ({
           <Text fontSize="14">{dayjs(createdAt).format("MMM DD, YYYY")}</Text>
         </ModalBody>
         <ModalBody textAlign="center">
-          <Flex gridGap="2" justifyContent="center">
-            {authors.map((author, index) => (
+          <Flex
+            direction="column"
+            gridGap="2"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {authors.map((author) => (
               <Box textAlign="center">
                 <Flex gridGap="2" alignItems="center">
-                  {index > 0 && "&"}
                   <UserPhoto src={author.avatar} w="6" h="6" />
                   <Text>{author.name}</Text>
                 </Flex>
@@ -81,6 +86,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
             ))}
           </Flex>
         </ModalBody>
+        <Divider m="4" />
         <ModalBody>
           {description}
           <Flex alignItems="center" gridGap="2">
@@ -97,7 +103,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
           </Flex>
           <Comments comments={comments} />
         </ModalBody>
-        <ModalFooter></ModalFooter>
+        <ModalFooter />
       </ModalContent>
     </Modal>
   );

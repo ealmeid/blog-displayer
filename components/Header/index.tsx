@@ -6,7 +6,7 @@ const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const iconProps: any = {
-    color: () => useColorModeValue("black", "white"),
+    color: useColorModeValue("black", "white"),
     w: "8",
     h: "8",
     p: "1",

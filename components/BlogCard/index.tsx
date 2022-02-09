@@ -13,8 +13,9 @@ const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
   return (
     <Flex gridGap="4" alignItems="flex-start">
       <Flex w="8" minH="8" position="relative">
-        {authors.map((_author, index) => (
+        {authors.map((author, index) => (
           <UserPhoto
+            key={author.id}
             src={firstAuthor.avatar}
             position="absolute"
             zIndex={authors.length - index}
@@ -58,11 +59,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, onClick }) => {
     >
       <Flex direction="column" padding="4">
         <Image
-          borderRadius="lg"
-          h="20"
-          objectFit="cover"
           src={imageData[parseInt(id)]}
+          h="20"
+          borderRadius="lg"
+          objectFit="cover"
           marginBottom="2"
+          alt="Blog Cover Photo"
         />
         <Text
           my="2"

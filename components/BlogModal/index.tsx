@@ -25,12 +25,14 @@ const Comments: React.FC<{ comments: Comment[] }> = ({ comments }) => {
 
   return (
     <Flex direction="column" gridGap="4" maxH="44" overflowY="auto">
-      {comments.map((comment: Comment) => {
-        const { title, description, createdAt, updatedAt } = comment;
-        return (
-          <Flex gridGap="4">
-            <UserPhoto src="" />
+      {comments.map((comment: Comment, index: number) => {
+        const { title, description, createdAt } = comment;
 
+        // It's not good to use index as a key, but since this is a simple example
+        // and we're not changing the resulting comment list, it's fine in this case.
+        return (
+          <Flex gridGap="4" key={index}>
+            <UserPhoto src="" />
             <Flex direction="column">
               <Text fontWeight="medium">{title}</Text>
               <Text fontSize="16">{description}</Text>
@@ -57,10 +59,11 @@ const BlogModal: React.FC<BlogModalProps> = ({
       <ModalContent borderRadius="lg">
         <ModalCloseButton />
         <Image
-          borderTopRadius="lg"
-          h="24"
-          objectFit="cover"
           src={imageData[parseInt(id)]}
+          alt="Blog Cover Photo"
+          h="24"
+          borderTopRadius="lg"
+          objectFit="cover"
           marginBottom="2"
         />
         <ModalHeader fontSize="28" textAlign="center" pb="0">
@@ -77,7 +80,7 @@ const BlogModal: React.FC<BlogModalProps> = ({
             alignItems="center"
           >
             {authors.map((author) => (
-              <Box textAlign="center">
+              <Box textAlign="center" key={author.id}>
                 <Flex gridGap="2" alignItems="center">
                   <UserPhoto src={author.avatar} w="6" h="6" />
                   <Text>{author.name}</Text>

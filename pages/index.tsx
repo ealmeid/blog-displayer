@@ -21,6 +21,21 @@ import Header from "../components/Header";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import BlogModal from "../components/BlogModal";
 
+const PageButton: React.FC<{
+  i: number;
+  setCurrentPage: any;
+  colors: string[];
+}> = ({ i, setCurrentPage, colors }) => (
+  <Button
+    onClick={() => setCurrentPage(i + 1)}
+    color={useColorModeValue("black", "white")}
+    cursor="pointer"
+    bg={useColorModeValue(colors[0], colors[1])}
+  >
+    {i + 1}
+  </Button>
+);
+
 const BlogPosts: React.FC<{
   posts: Blog[];
   currentPage: number;
@@ -37,12 +52,11 @@ const BlogPosts: React.FC<{
   setCurrentPage,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [currentBlog, setCurrentBlog] = useState<Blog | null>(null);
 
   if (posts.length === 0) {
     return <Text>No blog posts found.</Text>;
   }
-
-  const [currentBlog, setCurrentBlog] = useState<Blog>(posts[0]);
 
   return (
     <Flex direction="column" gridGap="12" margin="auto" maxW="1000px">
@@ -63,12 +77,14 @@ const BlogPosts: React.FC<{
             />
           ))}
       </Flex>
-      <BlogModal
-        blog={currentBlog}
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-      />
+      {currentBlog !== null && (
+        <BlogModal
+          blog={currentBlog}
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+        />
+      )}
       <Flex
         justifyContent="space-between"
         maxW="700px"
@@ -86,20 +102,21 @@ const BlogPosts: React.FC<{
           <Text display={["none", "block"]}>Prev. Page</Text>
         </Button>
         <Flex gridGap="4" flex="1">
-          {Array.from(new Array(totalPages)).map((_x, i) => (
-            <Button
-              onClick={() => setCurrentPage(i + 1)}
-              color={useColorModeValue("black", "white")}
-              cursor="pointer"
-              bg={
-                currentPage === i + 1
-                  ? useColorModeValue("#e0e1e4", "#6e7ca1")
-                  : useColorModeValue("#edf2f7", "#3d475d")
-              }
-            >
-              {i + 1}
-            </Button>
-          ))}
+          {Array.from(new Array(totalPages)).map((_x, i) => {
+            const colors =
+              currentPage === i + 1
+                ? ["#e0e1e4", "#6e7ca1"]
+                : ["#edf2f7", "#3d475d"];
+
+            return (
+              <PageButton
+                i={i}
+                key={i}
+                setCurrentPage={setCurrentPage}
+                colors={colors}
+              />
+            );
+          })}
         </Flex>
         <Button
           visibility={currentPage !== totalPages ? "visible" : "hidden"}

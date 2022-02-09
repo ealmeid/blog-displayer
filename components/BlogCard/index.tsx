@@ -3,6 +3,7 @@ import { Button, Flex, Text, Image } from "@chakra-ui/react";
 import { useColorModeValue } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import Card from "../Card";
+import UserPhoto from "../UserPhoto";
 
 const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
   const firstAuthor = authors[0];
@@ -10,20 +11,14 @@ const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
 
   return (
     <Flex gridGap="4" alignItems="flex-start">
-      <Flex w="8" position="relative">
-        {authors.map((author, index) => (
-          <Image
+      <Flex w="8" minH="8" position="relative">
+        {authors.map((_author, index) => (
+          <UserPhoto
             src={firstAuthor.avatar}
-            fallbackSrc="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
-            zIndex={authors.length - index}
-            left={index}
-            borderColor="black"
-            borderWidth="2px"
             position="absolute"
-            borderRadius="full"
+            zIndex={authors.length - index}
+            left={index * 2}
             boxShadow={index > 0 ? "lg" : "none"}
-            w="8"
-            h="8"
           />
         ))}
       </Flex>
@@ -39,7 +34,7 @@ const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
   );
 };
 
-const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
+const BlogCard: React.FC<BlogCardProps> = ({ blog, onClick }) => {
   const { id, title, description, createdAt, authors, comments } = blog;
 
   const numOfComments = comments.length;
@@ -52,6 +47,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
       cursor="pointer"
       transitionProperty="background-color"
       transitionDuration="0.15s"
+      onClick={onClick}
       _hover={{
         bg: useColorModeValue("#e6e6e6", "#252d41"),
       }}
@@ -104,6 +100,7 @@ interface AuthorsInfoProps {
 
 interface BlogCardProps {
   blog: Blog;
+  onClick: () => void;
 }
 
 export default BlogCard;

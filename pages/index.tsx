@@ -11,19 +11,15 @@ import {
   Spinner,
   Box,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import getBlogPosts from "../api";
 import { useState } from "react";
 import BlogCard from "../components/BlogCard";
 import Header from "../components/Header";
-import {
-  ArrowBackIcon,
-  ArrowForwardIcon,
-  ArrowLeftIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
+import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import BlogModal from "../components/BlogModal";
 
 const BlogPosts: React.FC<{
   posts: Blog[];
@@ -40,9 +36,13 @@ const BlogPosts: React.FC<{
   totalPages,
   setCurrentPage,
 }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   if (posts.length === 0) {
     return <Text>No blog posts found.</Text>;
   }
+
+  const [currentBlog, setCurrentBlog] = useState<Blog>(posts[0]);
 
   return (
     <Flex direction="column" gridGap="8" margin="auto">
@@ -52,16 +52,28 @@ const BlogPosts: React.FC<{
             (a: Blog, b: Blog) =>
               new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf()
           )
-          .map((blog: Blog) => (
-            <BlogCard blog={blog} key={blog.id} />
+          .map((blog: Blog, index: number) => (
+            <BlogCard
+              blog={blog}
+              key={blog.id}
+              onClick={() => {
+                setCurrentBlog(blog);
+                onOpen();
+              }}
+            />
           ))}
       </Flex>
+      <BlogModal
+        blog={currentBlog}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+      />
       <Flex
         justifyContent="space-between"
         maxW="700px"
         m="auto"
-        gridGap="8"
-        direction={["column", "row"]}
+        gridGap={["2", "8"]}
       >
         <Button
           visibility={currentPage !== 1 ? "visible" : "hidden"}
@@ -71,7 +83,7 @@ const BlogPosts: React.FC<{
           onClick={onPrevPage}
         >
           <ArrowBackIcon />
-          Prev. Page
+          <Text display={["none", "block"]}>Prev. Page</Text>
         </Button>
         <Flex gridGap="4" maxW="100%" overflowX="auto">
           {Array.from(new Array(totalPages)).map((_x, i) => (
@@ -95,7 +107,7 @@ const BlogPosts: React.FC<{
           ml="auto"
           onClick={onNextPage}
         >
-          Next Page
+          <Text display={["none", "block"]}>Next Page</Text>
           <ArrowForwardIcon />
         </Button>
       </Flex>

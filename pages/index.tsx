@@ -201,7 +201,7 @@ const Home: NextPage = () => {
             </Button>
           </InputRightElement>
         </InputGroup> */}
-        {isLoading ? (
+        {isLoading || !blogPosts.data ? (
           <Flex direction="column" alignItems="center" gridGap="4">
             <Text color="blackAlpha.600">Retrieving Blog Posts...</Text>
             <Spinner

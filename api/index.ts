@@ -1,9 +1,13 @@
 import axios, { AxiosResponse } from "axios";
+import convertBlogDataToHash from "../utils/helpers";
 
 // We're just returning the entire payload with this endpoint
 // Normally we'd be able to pass filter/sort/pagination parameters so that we
 // can only get portions of the dataset for efficiency purposes
-export const getBlogPosts = (searchTerm: string = "", pageSize: number = 5) =>
+export const getBlogPosts = (
+  searchTerm: string = "",
+  pageSize: number = 5
+): Promise<BlogPostResponse> =>
   axios
     .get("https://6144e843411c860017d256f0.mockapi.io/api/v1/posts")
     .then((res: AxiosResponse<Blog[]>) => {
@@ -11,24 +15,8 @@ export const getBlogPosts = (searchTerm: string = "", pageSize: number = 5) =>
         x.title.includes(searchTerm)
       );
 
-      let blogPostHash: any = {};
-      let counter = 1;
-
-      if (blogPostData.length === 0) return { 1: [] };
-
-      for (var i = 0; i < blogPostData.length; i++) {
-        if (blogPostHash[counter]) {
-          blogPostHash[counter].push(blogPostData[i]);
-        } else {
-          blogPostHash[counter] = [blogPostData[i]];
-        }
-
-        if ((i + 1) % pageSize === 0 && i !== 0) counter++;
-      }
-
-      return blogPostHash;
+      let blogHash = convertBlogDataToHash(blogPostData, pageSize);
+      return blogHash;
     });
-
-// interface BlogPostResponse {}
 
 export default getBlogPosts;

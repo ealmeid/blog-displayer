@@ -38,6 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({
             <PageButton
               i={i}
               key={i}
+              data_test_id="page-button"
               setCurrentPage={setCurrentPage}
               colors={colors}
             />

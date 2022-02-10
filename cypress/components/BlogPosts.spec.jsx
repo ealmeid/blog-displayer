@@ -39,6 +39,6 @@ describe("Test different views of BlogPosts component", () => {
         />
       </ChakraProvider>
     );
-    cy.get('[data_test_id="blog-card"').should("have.length", 5);
+    cy.get('[data_test_id="blog-card"]').should("have.length", 5);
   });
 });

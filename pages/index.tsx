@@ -7,18 +7,23 @@ import {
   Spinner,
   Box,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import getBlogPosts from "../api";
 import { useState } from "react";
 import Header from "../components/molecules/Header";
 import BlogPosts from "../components/organisms/BlogPosts";
+import BlogModal from "../components/organisms/BlogModal";
+import Pagination from "../components/molecules/Pagination";
 
 const Home: NextPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [currentBlog, setCurrentBlog] = useState<Blog | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const blogPostsQuery = useQuery(
     ["blogs", searchTerm],
@@ -82,14 +87,32 @@ const Home: NextPage = () => {
             />
           </Flex>
         ) : (
-          <BlogPosts
-            posts={blogPostsQuery.data[currentPage] as Blog[]}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            onNextPage={() => setCurrentPage(currentPage + 1)}
-            onPrevPage={() => setCurrentPage(currentPage - 1)}
-            totalPages={Object.keys(blogPostsQuery.data).length}
-          />
+          <>
+            <Flex direction="column" gridGap="12" margin="auto" maxW="1000px">
+              {currentBlog !== null && (
+                <BlogModal
+                  blog={currentBlog}
+                  isOpen={isOpen}
+                  onOpen={onOpen}
+                  onClose={onClose}
+                />
+              )}
+              <BlogPosts
+                posts={blogPostsQuery.data[currentPage] as Blog[]}
+                onBlogPostClick={(blog: Blog) => {
+                  setCurrentBlog(blog);
+                  onOpen();
+                }}
+              />
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                onNextPage={() => setCurrentPage(currentPage + 1)}
+                onPrevPage={() => setCurrentPage(currentPage - 1)}
+                totalPages={Object.keys(blogPostsQuery.data).length}
+              />
+            </Flex>
+          </>
         )}
       </Flex>
     </Box>

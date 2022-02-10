@@ -5,6 +5,10 @@ const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
   const firstAuthor = authors[0];
   const remainingAuthors = authors.slice(1);
 
+  if (authors.length === 0 || authors === null) {
+    return <Text>No Authors.</Text>;
+  }
+
   return (
     <Flex gridGap="4" alignItems="flex-start">
       <Flex w="8" minH="8" position="relative">
@@ -21,12 +25,10 @@ const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
           />
         ))}
       </Flex>
-      <Text fontSize="14" noOfLines={3}>
+      <Text fontSize="14" noOfLines={3} flex="1">
         By {firstAuthor.name}
         {remainingAuthors.length !== 0 && (
-          <>
-            <br />& {remainingAuthors.length} more authors
-          </>
+          <> & {remainingAuthors.length} more authors</>
         )}
       </Text>
     </Flex>

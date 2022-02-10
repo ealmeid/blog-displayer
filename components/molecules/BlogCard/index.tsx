@@ -13,6 +13,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, onClick }) => {
 
   return (
     <Card
+      data_test_id="blog-card"
       key={id}
       bg={useColorModeValue("white", "#171c28")}
       maxW="300px"

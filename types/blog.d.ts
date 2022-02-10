@@ -4,8 +4,8 @@ interface Blog {
   description: string;
   authors: Author[];
   comments: Comment[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Author {
@@ -13,8 +13,8 @@ interface Author {
   name: string;
   avatar: string;
   postId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Comment {
@@ -22,6 +22,6 @@ interface Comment {
   title: string;
   description: string;
   postId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }

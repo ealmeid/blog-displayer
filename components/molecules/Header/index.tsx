@@ -24,6 +24,7 @@ const Header = () => {
   return (
     <Flex
       h="8vh"
+      maxH="20"
       bg={useColorModeValue("white", "#171c28")}
       w="100%"
       alignItems="center"

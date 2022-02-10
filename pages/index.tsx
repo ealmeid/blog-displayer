@@ -1,137 +1,21 @@
 import type { NextPage } from "next";
+import Head from "next/head";
 import {
   Flex,
   Text,
   Heading,
-  Skeleton,
-  Button,
   Input,
   InputGroup,
   InputRightElement,
   Spinner,
   Box,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import getBlogPosts from "../api";
 import { useState } from "react";
-import BlogCard from "../components/BlogCard";
-import Header from "../components/Header";
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
-import BlogModal from "../components/BlogModal";
-
-const PageButton: React.FC<{
-  i: number;
-  setCurrentPage: any;
-  colors: string[];
-}> = ({ i, setCurrentPage, colors }) => (
-  <Button
-    onClick={() => setCurrentPage(i + 1)}
-    color={useColorModeValue("black", "white")}
-    cursor="pointer"
-    bg={useColorModeValue(colors[0], colors[1])}
-  >
-    {i + 1}
-  </Button>
-);
-
-const BlogPosts: React.FC<{
-  posts: Blog[];
-  currentPage: number;
-  setCurrentPage: (page: number) => void;
-  onPrevPage: () => void;
-  onNextPage: () => void;
-  totalPages: number;
-}> = ({
-  posts,
-  currentPage,
-  onPrevPage,
-  onNextPage,
-  totalPages,
-  setCurrentPage,
-}) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [currentBlog, setCurrentBlog] = useState<Blog | null>(null);
-
-  if (posts.length === 0) {
-    return <Text>No blog posts found.</Text>;
-  }
-
-  return (
-    <Flex direction="column" gridGap="12" margin="auto" maxW="1000px">
-      <Flex wrap="wrap" gridGap="4" justifyContent="center">
-        {posts
-          .sort(
-            (a: Blog, b: Blog) =>
-              new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf()
-          )
-          .map((blog: Blog) => (
-            <BlogCard
-              blog={blog}
-              key={blog.id}
-              onClick={() => {
-                setCurrentBlog(blog);
-                onOpen();
-              }}
-            />
-          ))}
-      </Flex>
-      {currentBlog !== null && (
-        <BlogModal
-          blog={currentBlog}
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-        />
-      )}
-      <Flex
-        justifyContent="space-between"
-        maxW="700px"
-        m="auto"
-        gridGap={["2", "8"]}
-      >
-        <Button
-          visibility={currentPage !== 1 ? "visible" : "hidden"}
-          gridGap="2"
-          w="auto"
-          mr="auto"
-          onClick={onPrevPage}
-        >
-          <ArrowBackIcon />
-          <Text display={["none", "block"]}>Prev. Page</Text>
-        </Button>
-        <Flex gridGap="4" flex="1">
-          {Array.from(new Array(totalPages)).map((_x, i) => {
-            const colors =
-              currentPage === i + 1
-                ? ["#e0e1e4", "#6e7ca1"]
-                : ["#edf2f7", "#3d475d"];
-
-            return (
-              <PageButton
-                i={i}
-                key={i}
-                setCurrentPage={setCurrentPage}
-                colors={colors}
-              />
-            );
-          })}
-        </Flex>
-        <Button
-          visibility={currentPage !== totalPages ? "visible" : "hidden"}
-          gridGap="2"
-          w="auto"
-          ml="auto"
-          onClick={onNextPage}
-        >
-          <Text display={["none", "block"]}>Next Page</Text>
-          <ArrowForwardIcon />
-        </Button>
-      </Flex>
-    </Flex>
-  );
-};
+import Header from "../components/molecules/Header";
+import BlogPosts from "../components/organisms/BlogPosts";
 
 const Home: NextPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -139,7 +23,7 @@ const Home: NextPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const blogPosts = useQuery(
+  const blogPostsQuery = useQuery(
     ["blogs", searchTerm],
     () => getBlogPosts(searchTerm, 5),
     {
@@ -160,6 +44,10 @@ const Home: NextPage = () => {
       transitionProperty="background-color"
       transitionDuration="0.15s"
     >
+      <Head>
+        <title>Blog Displayer | Home</title>
+        <meta property="og:title" content="Blog Displayer | Home" key="title" />
+      </Head>
       <Header />
       <Flex
         flex="1"
@@ -201,7 +89,7 @@ const Home: NextPage = () => {
             </Button>
           </InputRightElement>
         </InputGroup> */}
-        {isLoading || !blogPosts.data ? (
+        {isLoading || !blogPostsQuery.data ? (
           <Flex direction="column" alignItems="center" gridGap="4">
             <Text color="blackAlpha.600">Retrieving Blog Posts...</Text>
             <Spinner
@@ -214,12 +102,12 @@ const Home: NextPage = () => {
           </Flex>
         ) : (
           <BlogPosts
-            posts={blogPosts.data[currentPage] as Blog[]}
+            posts={blogPostsQuery.data[currentPage] as Blog[]}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             onNextPage={() => setCurrentPage(currentPage + 1)}
             onPrevPage={() => setCurrentPage(currentPage - 1)}
-            totalPages={Object.keys(blogPosts.data).length}
+            totalPages={Object.keys(blogPostsQuery.data).length}
           />
         )}
       </Flex>

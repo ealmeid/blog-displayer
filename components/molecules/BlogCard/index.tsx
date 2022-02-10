@@ -1,42 +1,10 @@
 import { ChatIcon } from "@chakra-ui/icons";
-import { Button, Flex, Text, Image } from "@chakra-ui/react";
+import { Flex, Text, Image } from "@chakra-ui/react";
 import { useColorModeValue } from "@chakra-ui/react";
 import dayjs from "dayjs";
-import imageData from "../../utils/imageData";
-import Card from "../Card";
-import UserPhoto from "../UserPhoto";
-
-const AuthorsInfo: React.FC<AuthorsInfoProps> = ({ authors }) => {
-  const firstAuthor = authors[0];
-  const remainingAuthors = authors.slice(1);
-
-  return (
-    <Flex gridGap="4" alignItems="flex-start">
-      <Flex w="8" minH="8" position="relative">
-        {authors.map((author, index) => (
-          <UserPhoto
-            key={author.id}
-            src={firstAuthor.avatar}
-            position="absolute"
-            zIndex={authors.length - index}
-            left={index * 2}
-            boxShadow={
-              authors.length !== 1 ? "2px 0px 2px rgba(0, 0, 0, 0.25)" : "none"
-            }
-          />
-        ))}
-      </Flex>
-      <Text fontSize="14" noOfLines={3}>
-        By {firstAuthor.name}
-        {remainingAuthors.length !== 0 && (
-          <>
-            <br />& {remainingAuthors.length} more authors
-          </>
-        )}
-      </Text>
-    </Flex>
-  );
-};
+import imageData from "../../../utils/imageData";
+import Card from "../../atoms/Card";
+import AuthorsInfo from "../AuthorsInfo";
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog, onClick }) => {
   const { id, title, description, createdAt, authors, comments } = blog;
@@ -99,10 +67,6 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog, onClick }) => {
     </Card>
   );
 };
-
-interface AuthorsInfoProps {
-  authors: Author[];
-}
 
 interface BlogCardProps {
   blog: Blog;

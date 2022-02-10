@@ -4,9 +4,6 @@ import {
   Flex,
   Text,
   Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
   Spinner,
   Box,
   useColorModeValue,
@@ -73,22 +70,6 @@ const Home: NextPage = () => {
         >
           Displaying randomly generated lorem ipsum blogs. All day, every day.
         </Heading>
-        {/* <InputGroup w={["100%", "60%", "40%"]}>
-          <Input
-            bg="white"
-            placeholder="Search blog by name"
-            value={searchTerm}
-            onChange={(e) => {
-              setIsLoading(true);
-              setSearchTerm(e.target.value);
-            }}
-          />
-          <InputRightElement w="18">
-            <Button h="full" w="full" onClick={() => {}}>
-              Search
-            </Button>
-          </InputRightElement>
-        </InputGroup> */}
         {isLoading || !blogPostsQuery.data ? (
           <Flex direction="column" alignItems="center" gridGap="4">
             <Text color="blackAlpha.600">Retrieving Blog Posts...</Text>
